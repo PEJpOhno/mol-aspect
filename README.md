@@ -25,7 +25,7 @@ my_aspect.get_aspect_ratio('PATH_TO_YOUR_xyz_FILE.xyz')
 To extract the three-dimensional coordinates of a molecule, use the function extract_heavy_atoms_from_xyz() for .xyz files and extract_heavy_atoms_from_mol() for .mol files.  
 
 ```python
-extract_heavy_atoms_from_xyz('PATH_TO_YOUR_xyz_FILE.xyz')
+my_aspect.extract_heavy_atoms_from_xyz('PATH_TO_YOUR_xyz_FILE.xyz')
 ```
 
 In an SDF file containing multiple molecules, the aspect ratio is returned as a nested list of values corresponding to each molecule, but the three-dimensional coordinates of individual molecules cannot be extracted.  
