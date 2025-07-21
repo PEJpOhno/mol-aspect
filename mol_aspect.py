@@ -4,7 +4,7 @@
 # license that can be found in the LICENSE file.
 
 # 2025/07/20 M. Ohno
-# MolAspectRatio
+# MolAspectRatio version 0.1
 
 import os
 import numpy as np
