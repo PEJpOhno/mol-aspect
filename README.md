@@ -2,18 +2,19 @@
 This module provides functions and a class to extract heavy atom coordinates from .xyz, mol and .sdf files and to calculate the aspect ratio of molecules using PCA.  
 
 ## Current version and requirements
-current version = 0.1  
+current version = 0.2  
 
 requirements  
-pyhon 3.10, 3.11, 3.12, 3.13  
-numpy >= 1.22.4
+pyhon >= 3.12  
+numpy >= 2.0.2  
+rdkit >= 2024.3.1  
+py3Dmol >= 2.4.0  
 
 ## Getting Start  
 
 Create an instance of a class.  
-```python
-from mol_aspect import MolAspectRatio
-my_aspect = MolAspectRatio()
+```
+pip install https://github.com/PEJpOhno/mol-aspect.git
 ```
 Calculate the aspect ratio of the molecule provided in the given .xyz file.  
 For .mol and .sdf files as well, include the file extension when specifying the file name.  
