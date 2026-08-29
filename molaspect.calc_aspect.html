@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>molaspect.calc_aspect module &mdash; mol-aspect 2026/08/29 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a32c22b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="molaspect.view_aspect3d module" href="molaspect.view_aspect3d.html" />
+    <link rel="prev" title="molaspect.read_mol module" href="molaspect.read_mol.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mol-aspect
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="molaspect.read_mol.html">molaspect.read_mol module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">molaspect.calc_aspect module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#molaspect.calc_aspect.extract_heavy_atoms"><code class="docutils literal notranslate"><span class="pre">extract_heavy_atoms()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#molaspect.calc_aspect.get_aspect_ratio"><code class="docutils literal notranslate"><span class="pre">get_aspect_ratio()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#molaspect.calc_aspect.mol_aspect_ratio"><code class="docutils literal notranslate"><span class="pre">mol_aspect_ratio()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="molaspect.view_aspect3d.html">molaspect.view_aspect3d module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">動作の流れ</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mol-aspect</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">molaspect.calc_aspect module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/molaspect.calc_aspect.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-molaspect.calc_aspect">
+<span id="molaspect-calc-aspect-module"></span><h1>molaspect.calc_aspect module<a class="headerlink" href="#module-molaspect.calc_aspect" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="molaspect.calc_aspect.extract_heavy_atoms">
+<span class="sig-prename descclassname"><span class="pre">molaspect.calc_aspect.</span></span><span class="sig-name descname"><span class="pre">extract_heavy_atoms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mol</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.calc_aspect.extract_heavy_atoms" title="Link to this definition"></a></dt>
+<dd><p>Extract 3D coordinates of non-hydrogen atoms from a mol.</p>
+<p>Hydrogen isotopes (H, D, T; atomic number 1) are excluded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mol</strong> – An RDKit Mol, or None.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Nested list <code class="docutils literal notranslate"><span class="pre">[[&quot;element_symbol&quot;,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z],</span> <span class="pre">...]</span></code>.
+Returns <code class="docutils literal notranslate"><span class="pre">[[&quot;error&quot;,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]]</span></code> if <code class="docutils literal notranslate"><span class="pre">mol</span></code> is None, has no
+conformer, has no heavy atoms, or another error occurs.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="molaspect.calc_aspect.get_aspect_ratio">
+<span class="sig-prename descclassname"><span class="pre">molaspect.calc_aspect.</span></span><span class="sig-name descname"><span class="pre">get_aspect_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.calc_aspect.get_aspect_ratio" title="Link to this definition"></a></dt>
+<dd><p>Read a file, extract heavy atoms, and run PCA per molecule.</p>
+<p>Each result is <code class="docutils literal notranslate"><span class="pre">{&quot;name&quot;:</span> <span class="pre">filename,</span> <span class="pre">**mol_aspect_ratio(...)}</span></code>.
+Coordinate files use the file geometry as-is. <code class="docutils literal notranslate"><span class="pre">.csv</span></code> is
+always embedded via <code class="docutils literal notranslate"><span class="pre">read_smiles</span></code> (UFF off by default).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file_path</strong> (<em>pathlib.Path</em><em> or </em><em>str</em>) – Path to a molecule file
+supported by <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>One dict per structure. A <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> from reading
+(unsupported extension or missing CSV <code class="docutils literal notranslate"><span class="pre">SMILES</span></code> column)
+returns one zero-filled dict with <code class="docutils literal notranslate"><span class="pre">name</span></code>. Other exceptions
+return <code class="docutils literal notranslate"><span class="pre">[]</span></code>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="molaspect.calc_aspect.mol_aspect_ratio">
+<span class="sig-prename descclassname"><span class="pre">molaspect.calc_aspect.</span></span><span class="sig-name descname"><span class="pre">mol_aspect_ratio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">got_coords</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.calc_aspect.mol_aspect_ratio" title="Link to this definition"></a></dt>
+<dd><p>Perform PCA on a heavy-atom coordinate list.</p>
+<p>The centroid is the unweighted mean of heavy-atom coordinates in
+the original frame. The molecule is not moved. <code class="docutils literal notranslate"><span class="pre">L</span></code> is the
+max-min projection onto each principal axis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>got_coords</strong> (<em>list</em>) – Coordinate rows
+<code class="docutils literal notranslate"><span class="pre">[[&quot;element_symbol&quot;,</span> <span class="pre">x,</span> <span class="pre">y,</span> <span class="pre">z],</span> <span class="pre">...]</span></code>.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p>On success:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;var_ratio&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">PC2</span><span class="o">/</span><span class="n">PC1</span><span class="p">,</span> <span class="n">PC3</span><span class="o">/</span><span class="n">PC1</span><span class="p">],</span>
+    <span class="s2">&quot;length_ratio&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">L2</span><span class="o">/</span><span class="n">L1</span><span class="p">,</span> <span class="n">L3</span><span class="o">/</span><span class="n">L1</span><span class="p">],</span>
+    <span class="s2">&quot;variance&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">PC1</span><span class="p">,</span> <span class="n">PC2</span><span class="p">,</span> <span class="n">PC3</span><span class="p">],</span>
+    <span class="s2">&quot;length&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">L1</span><span class="p">,</span> <span class="n">L2</span><span class="p">,</span> <span class="n">L3</span><span class="p">],</span>
+    <span class="s2">&quot;centroid&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">centroid_x</span><span class="p">,</span> <span class="n">centroid_y</span><span class="p">,</span> <span class="n">centroid_z</span><span class="p">],</span>
+    <span class="s2">&quot;axes&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">PC1</span> <span class="n">vector</span><span class="p">,</span> <span class="n">PC2</span> <span class="n">vector</span><span class="p">,</span> <span class="n">PC3</span> <span class="n">vector</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Returns the same keys with zeros if <code class="docutils literal notranslate"><span class="pre">got_coords</span></code> contains
+<code class="docutils literal notranslate"><span class="pre">[&quot;error&quot;,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0]</span></code> or PCA fails. Does not include <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="molaspect.read_mol.html" class="btn btn-neutral float-left" title="molaspect.read_mol module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="molaspect.view_aspect3d.html" class="btn btn-neutral float-right" title="molaspect.view_aspect3d module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, M. Ohno.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

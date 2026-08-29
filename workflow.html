@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>動作の流れ &mdash; mol-aspect 2026/08/29 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=9a32c22b"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="molaspect.view_aspect3d module" href="molaspect.view_aspect3d.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            mol-aspect
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="molaspect.read_mol.html">molaspect.read_mol module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="molaspect.calc_aspect.html">molaspect.calc_aspect module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="molaspect.view_aspect3d.html">molaspect.view_aspect3d module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">動作の流れ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">読み込みの処理流れ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">呼び出し側</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">入力ファイル形式の違いによる処理差</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#pca">PCA の処理流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">表示の処理流れ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">関数名つきの呼び出し関係</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mol-aspect</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">動作の流れ</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/workflow.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="id1">
+<h1>動作の流れ<a class="headerlink" href="#id1" title="Link to this heading"></a></h1>
+<p>読み込みのあと、同じ mol を <strong>PCA</strong>（<code class="docutils literal notranslate"><span class="pre">get_aspect_ratio</span></code>）または <strong>表示</strong>（<code class="docutils literal notranslate"><span class="pre">view_aspect3d</span></code>）に渡す。表示も内部で同じ PCA を行う。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>read_mol_file / read_smiles / mol=
+        │
+        ├─► get_aspect_ratio 経路
+        │     extract_heavy_atoms → mol_aspect_ratio
+        │     dict（name + 比・分散・長さ・重心・軸）
+        │
+        └─► view_aspect3d 経路
+              extract_heavy_atoms → mol_aspect_ratio   ※ 同じ PCA
+              _prepare_display_mol → _draw_viewer
+              py3Dmol（任意で write_aspect3d_html）
+</pre></div>
+</div>
+<hr class="docutils" />
+<section id="id2">
+<h2>読み込みの処理流れ<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<p>座標ファイルは最適化済み 3D としてファイル座標を使う。SMILES とそれを集めた CSV だけ、接続情報から 3D 構造を生成する（<code class="docutils literal notranslate"><span class="pre">AllChem.EmbedMolecule</span></code>）。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>get_aspect_ratio(file_path)
+view_aspect3d(path=...)
+        │
+        ▼
+read_mol_file(path, seed, optimize)   ※ seed / optimize は .csv のみ
+        │
+        ├─ .xyz / .mol / .pdb / .sdf / .mol2
+        │     ファイルを読む（3D 構造は生成しない、UFF しない）
+        │     removeHs=False
+        │
+        └─ .csv
+              └─► read_smiles(smi, seed, optimize)
+                    AddHs → EmbedMolecule（3D 構造生成）→ UFF（optimize=True のとき）
+                    失敗: mol is None
+</pre></div>
+</div>
+<section id="id3">
+<h3>呼び出し側<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">get_aspect_ratio</span></code> … 返ってきた mol で PCA（<code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code> のデフォルト <code class="docutils literal notranslate"><span class="pre">optimize=False</span></code>）</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">view_aspect3d(path=...)</span></code> … 同じ <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code>。明示 H が無ければ表示用にだけ <code class="docutils literal notranslate"><span class="pre">AddHs(addCoords=True)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">view_aspect3d(mol=...)</span></code> … <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code> に入らない。渡された mol をそのまま使う</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>入力ファイル形式の違いによる処理差<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ol class="arabic simple">
+<li><p>拡張子: 座標ファイルか CSV か</p></li>
+<li><p>座標ファイル: ファイルの 3D をそのまま使う</p></li>
+<li><p>SMILES / CSV: 常に 3D 構造を生成する。構造最適化（UFF） は <code class="docutils literal notranslate"><span class="pre">optimize=True</span></code> のときだけ</p></li>
+</ol>
+</section>
+</section>
+<hr class="docutils" />
+<section id="pca">
+<h2>PCA の処理流れ<a class="headerlink" href="#pca" title="Link to this heading"></a></h2>
+<p>重原子（原子番号 ≠ 1）の座標だけを使う。幾何学的な形状を知りたいので、重心は単純平均。各軸の <code class="docutils literal notranslate"><span class="pre">L</span></code> は、その主軸への射影の max−min。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>mol
+        │
+        ▼
+extract_heavy_atoms(mol)
+        │
+        ├─ mol is None / コンフォーマー無し / 重原子無し
+        │     → [[&quot;error&quot;, 0, 0, 0]]
+        │
+        └─ 各原子
+              原子番号 1 は除く
+              [元素記号, x, y, z]
+        │
+        ▼
+mol_aspect_ratio(got_coords)
+        │
+        ├─ error 行、または点が 2 個未満、または PC1/L1 が 0
+        │     → _zero_aspect()（全キー 0）
+        │
+        └─ 成功
+              重心 = 重原子座標の平均
+              共分散 → 固有値分解（分散が大きい順が PC1–PC3）
+              各軸に射影して L1, L2, L3
+              var_ratio = [1, PC2/PC1, PC3/PC1]
+              length_ratio = [1, L2/L1, L3/L1]
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">get_aspect_ratio</span></code> は分子ごとに <code class="docutils literal notranslate"><span class="pre">{&quot;name&quot;:</span> <span class="pre">name,</span> <span class="pre">**mol_aspect_ratio(...)}</span></code> を並べる。読込の <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> は <code class="docutils literal notranslate"><span class="pre">name</span></code> 付きゼロ埋め 1 件。その他の例外は <code class="docutils literal notranslate"><span class="pre">[]</span></code>。</p>
+</section>
+<hr class="docutils" />
+<section id="id5">
+<h2>表示の処理流れ<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<p>PCA は計算側と同じ関数。表示用コピーだけ重心を原点に平行移動する。軸は ±L/2。色は PC1=青、PC2=緑、PC3=マゼンタ。<code class="docutils literal notranslate"><span class="pre">L=0</span></code> の軸は描かない。表示の際にも、PCAを再計算するので、PCA処理の結果を表示するために、オプションをそろえること。</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>view_aspect3d(path, name, mol, width, height)
+        │
+        ▼
+_resolve_mol(path, name, mol)
+        │
+        ├─ path と mol の両方 / どちらも無し / 名前不一致
+        │     → 英語のエラー文字列
+        ├─ mol=  → その mol
+        └─ path= → read_mol_file（上の読み込み流れ）
+        │
+        ▼
+mol is None / コンフォーマー無し / PCA がゼロ
+        → 英語のエラー文字列
+        │
+        ▼
+extract_heavy_atoms → mol_aspect_ratio   ※ PCA と同じ
+        │
+        ▼
+_prepare_display_mol(mol, centroid)
+        コピー
+        明示 H が無ければ Chem.AddHs(..., addCoords=True)  ※ 表示のみ
+        全原子を −centroid だけ平行移動
+        │
+        ▼
+_draw_viewer(...)
+        py3Dmol stick
+        円柱で三軸（長さ 0 はスキップ）
+        │
+        ▼
+（任意）write_aspect3d_html(viewer, filename, dir)
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="id6">
+<h2>関数名つきの呼び出し関係<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>get_aspect_ratio(file_path)
+  └─► read_mol_file(file_path)
+        └─► extract_heavy_atoms(mol)
+              └─► mol_aspect_ratio(got_coords)
+                    ├─ _zero_aspect()          ※ 失敗
+                    └─ numpy の平均・共分散・eigh
+
+
+view_aspect3d(path, name, mol, width, height)
+  └─► _resolve_mol(path, name, mol)
+        │
+        ├─ mol= のとき  → その mol を返す（read_mol_file は呼ばない）
+        └─ path= のとき
+              └─► read_mol_file(file_path)
+  └─► extract_heavy_atoms(resolved)
+        └─► mol_aspect_ratio(got_coords)
+  └─► _prepare_display_mol(resolved, centroid)
+        └─► _has_explicit_hydrogen(disp)
+        └─► Chem.AddHs(disp, addCoords=True)   ※ 明示 H が無いときだけ
+  └─► _draw_viewer(disp, eigvecs, lengths, width, height)
+        └─► py3Dmol.view / addModel / addCylinder
+  └─► （任意）write_aspect3d_html(viewer, filename, dir)
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>read_mol_file(file_path, seed, optimize)
+  │
+  ├─ .csv
+  │     └─► read_smiles(smi, seed, optimize)
+  │           ├─ Chem.MolFromSmiles
+  │           ├─ Chem.AddHs
+  │           ├─ AllChem.EmbedMolecule          ※ 3D 構造を生成（常に）
+  │           └─ AllChem.UFFOptimizeMolecule    ※ optimize=True のとき
+  │
+  └─ .xyz / .mol / .pdb / .sdf / .mol2
+        └─ Chem.MolFromXYZFile / MolFromMolFile / MolFromPDBFile
+            ForwardSDMolSupplier / MolFromMol2Block
+            （3D 構造は生成しない）
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="molaspect.view_aspect3d.html" class="btn btn-neutral float-left" title="molaspect.view_aspect3d module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, M. Ohno.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
