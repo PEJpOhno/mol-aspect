@@ -12,8 +12,12 @@ About mol-aspect
 ==========================
 Calculate molecular aspect ratios from heavy-atom coordinates by PCA, and optionally view the principal axes in 3D.
 
-**Project page:** https://github.com/pejpohno/mol-aspect
-**How to cite:** Ohno, M. mol-aspect. GitHub. https://github.com/PEJpOhno/mol-aspect (2025).
+**Project page:** https://github.com/pejpohno/mol-aspect  
+
+**How to cite:** Ohno, M. mol-aspect. GitHub. https://github.com/PEJpOhno/mol-aspect (2025).  
+
+Further informaiton: please see also README and example scripts in the repository.  
+
 
 .. toctree::
    :maxdepth: 2
@@ -23,3 +27,5 @@ Calculate molecular aspect ratios from heavy-atom coordinates by PCA, and option
    molaspect.calc_aspect
    molaspect.view_aspect3d
    workflow
+
+This module and its accompanying documentation were developed with the support of Cursor’s AI-assisted tools.  
