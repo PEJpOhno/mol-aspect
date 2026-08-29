@@ -9,7 +9,7 @@ The import name is `molaspect`. The pip name is `mol-aspect`.
 
 ## Current version and requirements
 
-current version = 0.2
+current version = 0.2.1
 
 requirements
 - python >= 3.12
