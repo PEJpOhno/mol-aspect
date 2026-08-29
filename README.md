@@ -4,7 +4,8 @@ Calculate molecular aspect ratios from heavy-atom coordinates by PCA, and option
 
 The import name is `molaspect`. The pip name is `mol-aspect`.
 
-**Docs:** [docs/workflow.md](docs/workflow.md)
+**Documentation:** https://pejpohno.github.io/mol-aspect/  
+**How to cite:** Ohno, M. mol-aspect. GitHub. https://github.com/PEJpOhno/mol-aspect (2025).  
 
 ## Current version and requirements
 
