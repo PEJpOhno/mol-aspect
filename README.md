@@ -22,7 +22,7 @@ requirements
 ```
 pip install git+https://github.com/PEJpOhno/mol-aspect.git
 ```
-
+Then  
 ```python
 import molaspect
 

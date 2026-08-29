@@ -19,7 +19,7 @@ read_mol_file / read_smiles / mol=
 
 ## 読み込みの処理流れ
 
-座標ファイルは最適化済み 3D としてファイル座標を使う。SMILES とそれを集めた CSV だけ、接続情報から 3D 構造を生成する（`AllChem.EmbedMolecule`）。
+座標ファイルは最適化済み 3D を入力することを前提としている。SMILES とそれを集めた CSV だけ、接続情報から 3D 構造を生成する（`AllChem.EmbedMolecule`）。
 
 ```text
 get_aspect_ratio(file_path)
