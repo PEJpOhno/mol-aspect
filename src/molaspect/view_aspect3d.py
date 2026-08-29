@@ -11,11 +11,10 @@ from pathlib import Path
 from rdkit import Chem
 import py3Dmol
 
-from .calc_aspect import extract_heavy_atoms, mol_aspect_ratio
+from .calc_aspect import ZERO_ASPECT, extract_heavy_atoms, mol_aspect_ratio
 from .read_mol import read_mol_file
 
 AXIS_COLORS = ("blue", "green", "magenta")
-PCA_FAILED = [0, 0, 0, 0]
 
 
 def _has_explicit_hydrogen(mol):
@@ -95,6 +94,10 @@ def view_aspect3d(path=None, name=None, mol=None, width=400, height=400):
     from the heavy-atom centroid (the display origin). Colors are
     PC1=blue, PC2=green, PC3=magenta.
 
+    Coordinate files are shown with file coordinates. ``.csv`` is
+    embedded via ``read_mol_file`` / ``read_smiles``. If the mol has
+    no explicit hydrogen, hydrogens are added for display only.
+
     Args:
         path (pathlib.Path or str): Molecule file path. Mutually
             exclusive with ``mol``.
@@ -119,15 +122,15 @@ def view_aspect3d(path=None, name=None, mol=None, width=400, height=400):
         return "No 3D coordinates: this molecule has no conformer."
 
     aspect = mol_aspect_ratio(extract_heavy_atoms(resolved))
-    if aspect == PCA_FAILED:
+    if aspect == ZERO_ASPECT:
         return (
             "PCA failed: need at least two non-hydrogen atoms "
             "with spatial extent."
         )
 
-    lengths = aspect[3]
-    centroid = aspect[4]
-    eigvecs = aspect[5]
+    lengths = aspect["length"]
+    centroid = aspect["centroid"]
+    eigvecs = aspect["axes"]
     disp = _prepare_display_mol(resolved, centroid)
     return _draw_viewer(disp, eigvecs, lengths, width, height)
 

@@ -1,36 +1,44 @@
 # mol-aspect
-This module provides functions and a class to extract heavy atom coordinates from .xyz, mol and .sdf files and to calculate the aspect ratio of molecules using PCA.  
+
+Calculate molecular aspect ratios from heavy-atom coordinates by PCA, and optionally view the principal axes in 3D.
+
+The import name is `molaspect`. The pip name is `mol-aspect`.
+
+**Documentation:** https://pejpohno.github.io/mol-aspect/  
+**How to cite:** Ohno, M. mol-aspect. GitHub. https://github.com/PEJpOhno/mol-aspect (2025).  
 
 ## Current version and requirements
-current version = 0.2  
 
-requirements  
-pyhon >= 3.12  
-numpy >= 2.0.2  
-rdkit >= 2024.3.1  
-py3Dmol >= 2.4.0  
+current version = 0.2
 
-## Getting Start  
+requirements
+- python >= 3.12
+- numpy >= 2.0.2
+- rdkit >= 2024.3.1
+- py3Dmol >= 2.4.0
 
-Create an instance of a class.  
+## Getting started
+
 ```
-pip install https://github.com/PEJpOhno/mol-aspect.git
+pip install git+https://github.com/PEJpOhno/mol-aspect.git
 ```
-Calculate the aspect ratio of the molecule provided in the given .xyz file.  
-For .mol and .sdf files as well, include the file extension when specifying the file name.  
 
 ```python
-my_aspect.get_aspect_ratio('PATH_TO_YOUR_xyz_FILE.xyz')
-```  
+import molaspect
 
-To extract the three-dimensional coordinates of a molecule, use the function extract_heavy_atoms_from_xyz() for .xyz files and extract_heavy_atoms_from_mol() for .mol files.  
-
-```python
-my_aspect.extract_heavy_atoms_from_xyz('PATH_TO_YOUR_xyz_FILE.xyz')
+molaspect.get_aspect_ratio("PATH_TO_YOUR_FILE.mol")
 ```
 
-In an SDF file containing multiple molecules, the aspect ratio is returned as a nested list of values corresponding to each molecule, but the three-dimensional coordinates of individual molecules cannot be extracted.  
+Coordinate files (`.xyz`, `.mol`, `.pdb`, `.sdf`, `.mol2`) are used as given 3D structures. Include the file extension in the path. `.sdf` and `.mol2` may contain multiple molecules.
+
+SMILES can be read with `read_smiles`, or as a `.csv` table whose header has a column named `SMILES`. Those paths always generate 3D coordinates (`AllChem.EmbedMolecule`); UFF is off unless `optimize=True`.
+
+For a worked example, see `examples/example_script.ipynb`. To display PC1–PC3 axes, use `view_aspect3d`.
+
+## Acknowledgement  
+This module and its accompanying documentation were developed with the support of Cursor’s AI-assisted tools.  
 
 ## Copyright and license
+
 Copyright (c) 2025 Mitsuru Ohno
 Released under the BSD-3 license, license that can be found in the LICENSE file.
