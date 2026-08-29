@@ -27,9 +27,10 @@ Copyright (c) 2006-2015, Rational Discovery LLC, Greg Landrum, and Julie Penzott
 ---
 
 Library: py3Dmol
-Website: https://pypi.org/project/py3Dmol/
+Website: https://pypi.org/project/py3Dmol/, https://3dmol.org/
 License: MIT License
 Copyright (c) David Koes and contributors
 (embeds 3Dmol.js; BSD 3-Clause License,
-Copyright (c) 2014, University of Pittsburgh and contributors)
+Copyright (c) 2014, University of Pittsburgh and contributors)  
+Nicholas Rego, David Koes, 3Dmol.js: molecular visualization with WebGL, Bioinformatics, Volume 31, Issue 8, April 2015, Pages 1322–1324, https://doi.org/10.1093/bioinformatics/btu829
 
