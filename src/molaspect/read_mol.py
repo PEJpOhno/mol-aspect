@@ -7,34 +7,38 @@
 # MolAspectRatio version 0.2
 
 import csv
-from pathlib import Path
 
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
 
-def read_mol_file(file_path, seed=123, optimize=True):
+def read_mol_file(file_path, seed=123, optimize=False):
     """Yield ``[filename, mol]`` one structure at a time.
 
     Single-molecule formats (``.xyz``, ``.mol``, ``.pdb``) yield one
     entry. ``.sdf`` and ``.mol2`` yield one entry per structure, with a
     1-based index appended to the filename (e.g. ``compounds.sdf_1``).
 
+    Coordinate files (``.xyz``, ``.mol``, ``.pdb``, ``.sdf``,
+    ``.mol2``) are treated as optimized 3D structures. File
+    coordinates are used as-is; they are not embedded or
+    force-field optimized. Explicit hydrogens are kept
+    (``removeHs=False``) so display can use file H coordinates when
+    present.
+
     ``.csv`` is a SMILES table. The first row is a header, and the
     column named ``SMILES`` (uppercase, exact match) is read. Each
     non-empty cell is passed to ``read_smiles``. Identifiers use the
     1-based file line number (header is line 1, so the first data row
-    is ``filename_2``). Other columns are ignored.
-
-    Coordinate files keep explicit hydrogens (``removeHs=False``) so
-    display can use file H coordinates when present.
+    is ``filename_2``). Other columns are ignored. ``.csv`` always
+    embeds; UFF runs only when ``optimize`` is True.
 
     Args:
         file_path (pathlib.Path): Path to the input file.
         seed (int): Random seed for SMILES embedding. Used only for
             ``.csv``. Defaults to 123.
         optimize (bool): If True, run UFF optimization after embedding
-            SMILES. Used only for ``.csv``. Defaults to True.
+            SMILES. Used only for ``.csv``. Defaults to False.
 
     Yields:
         list: ``[name, mol]`` where ``mol`` is an RDKit Mol or None.
@@ -80,18 +84,18 @@ def read_mol_file(file_path, seed=123, optimize=True):
         raise ValueError(f"Unsupported file extension: {ext}")
 
 
-def read_smiles(smiles, seed=123, optimize=True):
+def read_smiles(smiles, seed=123, optimize=False):
     """Build a 3D mol from a single SMILES string.
 
-    Adds hydrogens, embeds with ``randomSeed=seed``, and optionally
-    runs UFF optimization. For multiple SMILES, use a ``.csv`` file
-    with ``read_mol_file``.
+    Always adds hydrogens and embeds with ``randomSeed=seed``.
+    UFF optimization runs only when ``optimize`` is True. For
+    multiple SMILES, use a ``.csv`` file with ``read_mol_file``.
 
     Args:
         smiles (str): A single SMILES string.
         seed (int): Random seed for embedding. Defaults to 123.
         optimize (bool): If True, run UFF optimization after
-            embedding. Defaults to True.
+            embedding. Defaults to False.
 
     Yields:
         list: ``[smiles, mol]``. ``mol`` is None if parsing or
