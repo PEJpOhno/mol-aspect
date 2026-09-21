@@ -23,7 +23,7 @@ project = 'mol-aspect'
 copyright = '2026, M. Ohno'
 author = 'M. Ohno'
 version = _version_mod.__version__
-release = '2026/08/29'
+release = '2026/09/21'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

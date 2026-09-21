@@ -145,16 +145,22 @@ def mol_aspect_ratio(got_coords):
         return _zero_aspect()
 
 
-def get_aspect_ratio(file_path):
+def get_aspect_ratio(file_path, seed=123, optimize=True):
     """Read a file, extract heavy atoms, and run PCA per molecule.
 
     Each result is ``{"name": filename, **mol_aspect_ratio(...)}``.
     Coordinate files use the file geometry as-is. ``.csv`` is
-    always embedded via ``read_smiles`` (UFF off by default).
+    always embedded via ``read_smiles`` and UFF-optimized unless
+    ``optimize`` is False. ``seed`` and ``optimize`` are unused
+    for coordinate files.
 
     Args:
         file_path (pathlib.Path or str): Path to a molecule file
             supported by ``read_mol_file``.
+        seed (int): Random seed for SMILES embedding. Used only for
+            ``.csv``. Defaults to 123.
+        optimize (bool): If True, run UFF optimization after embedding
+            SMILES. Used only for ``.csv``. Defaults to True.
 
     Returns:
         list: One dict per structure. A ``ValueError`` from reading
@@ -166,7 +172,7 @@ def get_aspect_ratio(file_path):
     file_name = file_path.name
     try:
         results = []
-        for name, mol in read_mol_file(file_path):
+        for name, mol in read_mol_file(file_path,seed=seed, optimize=optimize):
             got_coords = extract_heavy_atoms(mol)
             results.append({"name": name, **mol_aspect_ratio(got_coords)})
         return results
