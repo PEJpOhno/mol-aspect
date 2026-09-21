@@ -12,7 +12,7 @@ from rdkit import Chem
 from rdkit.Chem import AllChem
 
 
-def read_mol_file(file_path, seed=123, optimize=False):
+def read_mol_file(file_path, seed=123, optimize=True):
     """Yield ``[filename, mol]`` one structure at a time.
 
     Single-molecule formats (``.xyz``, ``.mol``, ``.pdb``) yield one
@@ -29,16 +29,17 @@ def read_mol_file(file_path, seed=123, optimize=False):
     ``.csv`` is a SMILES table. The first row is a header, and the
     column named ``SMILES`` (uppercase, exact match) is read. Each
     non-empty cell is passed to ``read_smiles``. Identifiers use the
-    1-based file line number (header is line 1, so the first data row
-    is ``filename_2``). Other columns are ignored. ``.csv`` always
-    embeds; UFF runs only when ``optimize`` is True.
+    1-based data-row index (the first SMILES row is
+    ``filename_1``). Empty SMILES cells are skipped but still consume
+    an index. Other columns are ignored. ``.csv`` always
+    embeds and runs UFF unless ``optimize`` is False.
 
     Args:
         file_path (pathlib.Path): Path to the input file.
         seed (int): Random seed for SMILES embedding. Used only for
             ``.csv``. Defaults to 123.
         optimize (bool): If True, run UFF optimization after embedding
-            SMILES. Used only for ``.csv``. Defaults to False.
+            SMILES. Used only for ``.csv``. Defaults to True.
 
     Yields:
         list: ``[name, mol]`` where ``mol`` is an RDKit Mol or None.
@@ -74,7 +75,7 @@ def read_mol_file(file_path, seed=123, optimize=False):
             reader = csv.DictReader(inf)
             if reader.fieldnames is None or "SMILES" not in reader.fieldnames:
                 raise ValueError("CSV header must contain a SMILES column")
-            for i, row in enumerate(reader, start=2):
+            for i, row in enumerate(reader, start=1):
                 smi = (row.get("SMILES") or "").strip()
                 if not smi:
                     continue
@@ -84,18 +85,18 @@ def read_mol_file(file_path, seed=123, optimize=False):
         raise ValueError(f"Unsupported file extension: {ext}")
 
 
-def read_smiles(smiles, seed=123, optimize=False):
+def read_smiles(smiles, seed=123, optimize=True):
     """Build a 3D mol from a single SMILES string.
 
     Always adds hydrogens and embeds with ``randomSeed=seed``.
-    UFF optimization runs only when ``optimize`` is True. For
+    UFF optimization runs unless ``optimize`` is False. For
     multiple SMILES, use a ``.csv`` file with ``read_mol_file``.
 
     Args:
         smiles (str): A single SMILES string.
         seed (int): Random seed for embedding. Defaults to 123.
         optimize (bool): If True, run UFF optimization after
-            embedding. Defaults to False.
+            embedding. Defaults to True.
 
     Yields:
         list: ``[smiles, mol]``. ``mol`` is None if parsing or

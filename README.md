@@ -9,7 +9,7 @@ The import name is `molaspect`. The pip name is `mol-aspect`.
 
 ## Current version and requirements
 
-current version = 0.2.1
+current version = 0.3.0
 
 requirements
 - python >= 3.12
@@ -31,7 +31,7 @@ molaspect.get_aspect_ratio("PATH_TO_YOUR_FILE.mol")
 
 Coordinate files (`.xyz`, `.mol`, `.pdb`, `.sdf`, `.mol2`) are used as given 3D structures. Include the file extension in the path. `.sdf` and `.mol2` may contain multiple molecules.
 
-SMILES can be read with `read_smiles`, or as a `.csv` table whose header has a column named `SMILES`. Those paths always generate 3D coordinates (`AllChem.EmbedMolecule`); UFF is off unless `optimize=True`.
+SMILES can be read with `read_smiles`, or as a `.csv` table whose header has a column named `SMILES`. Those paths always generate 3D coordinates (`AllChem.EmbedMolecule`) and run UFF unless `optimize=False`. Defaults are `seed=123` and `optimize=True`. A SMILES string has no file-derived `name`; display it with `view_aspect3d(mol=...)`.
 
 For a worked example, see `examples/example_script.ipynb`. To display PC1–PC3 axes, use `view_aspect3d`.
 

@@ -21,7 +21,7 @@ def _has_explicit_hydrogen(mol):
     return any(atom.GetAtomicNum() == 1 for atom in mol.GetAtoms())
 
 
-def _resolve_mol(path, name, mol):
+def _resolve_mol(path, name, mol, seed=123, optimize=True):
     if mol is not None and path is not None:
         return "Specify either a file path or mol, not both."
     if mol is not None:
@@ -32,7 +32,7 @@ def _resolve_mol(path, name, mol):
     file_path = Path(path)
     found = None
     try:
-        for rec_name, rec_mol in read_mol_file(file_path):
+        for rec_name, rec_mol in read_mol_file(file_path, seed=seed, optimize=optimize):
             if name is None:
                 found = rec_mol
                 break
@@ -86,7 +86,7 @@ def _draw_viewer(disp_mol, eigvecs, lengths, width, height):
     return viewer
 
 
-def view_aspect3d(path=None, name=None, mol=None, width=400, height=400):
+def view_aspect3d(path=None, name=None, mol=None, width=400, height=400, seed=123, optimize=True):
     """Show one molecule in py3Dmol with PC1-PC3 axes.
 
     Specify a file ``path`` (and ``name`` for multi-molecule files) or
@@ -95,8 +95,11 @@ def view_aspect3d(path=None, name=None, mol=None, width=400, height=400):
     PC1=blue, PC2=green, PC3=magenta.
 
     Coordinate files are shown with file coordinates. ``.csv`` is
-    embedded via ``read_mol_file`` / ``read_smiles``. If the mol has
-    no explicit hydrogen, hydrogens are added for display only.
+    embedded via ``read_mol_file`` / ``read_smiles`` and
+    UFF-optimized unless ``optimize`` is False. ``seed`` and
+    ``optimize`` are unused for coordinate files and when ``mol``
+    is given. If the mol has no explicit hydrogen, hydrogens are
+    added for display only.
 
     Args:
         path (pathlib.Path or str): Molecule file path. Mutually
@@ -107,13 +110,17 @@ def view_aspect3d(path=None, name=None, mol=None, width=400, height=400):
             ``path``.
         width (int): Viewer width in pixels. Defaults to 400.
         height (int): Viewer height in pixels. Defaults to 400.
+        seed (int): Random seed for SMILES embedding. Used only for
+            ``.csv``. Defaults to 123.
+        optimize (bool): If True, run UFF optimization after embedding
+            SMILES. Used only for ``.csv``. Defaults to True.
 
     Returns:
         py3Dmol.view or str: A viewer on success, or an English error
         string on failure (missing path/mol, name mismatch, no 3D
         conformer, or PCA failure).
     """
-    resolved = _resolve_mol(path, name, mol)
+    resolved = _resolve_mol(path, name, mol, seed=seed, optimize=optimize)
     if isinstance(resolved, str):
         return resolved
     if resolved is None:
