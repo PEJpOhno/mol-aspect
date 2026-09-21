@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>molaspect.view_aspect3d module &mdash; mol-aspect 2026/08/29 documentation</title>
+  <title>molaspect.view_aspect3d module &mdash; mol-aspect 2026/09/21 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=9a32c22b"></script>
+      <script src="_static/documentation_options.js?v=ab67cd3e"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -82,15 +82,18 @@
 <span id="molaspect-view-aspect3d-module"></span><h1>molaspect.view_aspect3d module<a class="headerlink" href="#module-molaspect.view_aspect3d" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="molaspect.view_aspect3d.view_aspect3d">
-<span class="sig-prename descclassname"><span class="pre">molaspect.view_aspect3d.</span></span><span class="sig-name descname"><span class="pre">view_aspect3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.view_aspect3d.view_aspect3d" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">molaspect.view_aspect3d.</span></span><span class="sig-name descname"><span class="pre">view_aspect3d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">400</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.view_aspect3d.view_aspect3d" title="Link to this definition"></a></dt>
 <dd><p>Show one molecule in py3Dmol with PC1-PC3 axes.</p>
 <p>Specify a file <code class="docutils literal notranslate"><span class="pre">path</span></code> (and <code class="docutils literal notranslate"><span class="pre">name</span></code> for multi-molecule files) or
 <code class="docutils literal notranslate"><span class="pre">mol</span></code>. Single-molecule files may omit <code class="docutils literal notranslate"><span class="pre">name</span></code>. Axes are ±L/2
 from the heavy-atom centroid (the display origin). Colors are
 PC1=blue, PC2=green, PC3=magenta.</p>
 <p>Coordinate files are shown with file coordinates. <code class="docutils literal notranslate"><span class="pre">.csv</span></code> is
-embedded via <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code> / <code class="docutils literal notranslate"><span class="pre">read_smiles</span></code>. If the mol has
-no explicit hydrogen, hydrogens are added for display only.</p>
+embedded via <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code> / <code class="docutils literal notranslate"><span class="pre">read_smiles</span></code> and
+UFF-optimized unless <code class="docutils literal notranslate"><span class="pre">optimize</span></code> is False. <code class="docutils literal notranslate"><span class="pre">seed</span></code> and
+<code class="docutils literal notranslate"><span class="pre">optimize</span></code> are unused for coordinate files and when <code class="docutils literal notranslate"><span class="pre">mol</span></code>
+is given. If the mol has no explicit hydrogen, hydrogens are
+added for display only.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -102,6 +105,10 @@ exclusive with <code class="docutils literal notranslate"><span class="pre">mol<
 <code class="docutils literal notranslate"><span class="pre">path</span></code>.</p></li>
 <li><p><strong>width</strong> (<em>int</em>) – Viewer width in pixels. Defaults to 400.</p></li>
 <li><p><strong>height</strong> (<em>int</em>) – Viewer height in pixels. Defaults to 400.</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random seed for SMILES embedding. Used only for
+<code class="docutils literal notranslate"><span class="pre">.csv</span></code>. Defaults to 123.</p></li>
+<li><p><strong>optimize</strong> (<em>bool</em>) – If True, run UFF optimization after embedding
+SMILES. Used only for <code class="docutils literal notranslate"><span class="pre">.csv</span></code>. Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>

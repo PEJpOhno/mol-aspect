@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>molaspect.read_mol module &mdash; mol-aspect 2026/08/29 documentation</title>
+  <title>molaspect.read_mol module &mdash; mol-aspect 2026/09/21 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=9a32c22b"></script>
+      <script src="_static/documentation_options.js?v=ab67cd3e"></script>
       <script src="_static/doctools.js?v=fd6eb6e6"></script>
       <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/js/theme.js"></script>
@@ -82,7 +82,7 @@
 <span id="molaspect-read-mol-module"></span><h1>molaspect.read_mol module<a class="headerlink" href="#module-molaspect.read_mol" title="Link to this heading"></a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="molaspect.read_mol.read_mol_file">
-<span class="sig-prename descclassname"><span class="pre">molaspect.read_mol.</span></span><span class="sig-name descname"><span class="pre">read_mol_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.read_mol.read_mol_file" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">molaspect.read_mol.</span></span><span class="sig-name descname"><span class="pre">read_mol_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.read_mol.read_mol_file" title="Link to this definition"></a></dt>
 <dd><p>Yield <code class="docutils literal notranslate"><span class="pre">[filename,</span> <span class="pre">mol]</span></code> one structure at a time.</p>
 <p>Single-molecule formats (<code class="docutils literal notranslate"><span class="pre">.xyz</span></code>, <code class="docutils literal notranslate"><span class="pre">.mol</span></code>, <code class="docutils literal notranslate"><span class="pre">.pdb</span></code>) yield one
 entry. <code class="docutils literal notranslate"><span class="pre">.sdf</span></code> and <code class="docutils literal notranslate"><span class="pre">.mol2</span></code> yield one entry per structure, with a
@@ -96,9 +96,10 @@ present.</p>
 <p><code class="docutils literal notranslate"><span class="pre">.csv</span></code> is a SMILES table. The first row is a header, and the
 column named <code class="docutils literal notranslate"><span class="pre">SMILES</span></code> (uppercase, exact match) is read. Each
 non-empty cell is passed to <code class="docutils literal notranslate"><span class="pre">read_smiles</span></code>. Identifiers use the
-1-based file line number (header is line 1, so the first data row
-is <code class="docutils literal notranslate"><span class="pre">filename_2</span></code>). Other columns are ignored. <code class="docutils literal notranslate"><span class="pre">.csv</span></code> always
-embeds; UFF runs only when <code class="docutils literal notranslate"><span class="pre">optimize</span></code> is True.</p>
+1-based data-row index (the first SMILES row is
+<code class="docutils literal notranslate"><span class="pre">filename_1</span></code>). Empty SMILES cells are skipped but still consume
+an index. Other columns are ignored. <code class="docutils literal notranslate"><span class="pre">.csv</span></code> always
+embeds and runs UFF unless <code class="docutils literal notranslate"><span class="pre">optimize</span></code> is False.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -106,7 +107,7 @@ embeds; UFF runs only when <code class="docutils literal notranslate"><span clas
 <li><p><strong>seed</strong> (<em>int</em>) – Random seed for SMILES embedding. Used only for
 <code class="docutils literal notranslate"><span class="pre">.csv</span></code>. Defaults to 123.</p></li>
 <li><p><strong>optimize</strong> (<em>bool</em>) – If True, run UFF optimization after embedding
-SMILES. Used only for <code class="docutils literal notranslate"><span class="pre">.csv</span></code>. Defaults to False.</p></li>
+SMILES. Used only for <code class="docutils literal notranslate"><span class="pre">.csv</span></code>. Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
@@ -121,10 +122,10 @@ SMILES. Used only for <code class="docutils literal notranslate"><span class="pr
 
 <dl class="py function">
 <dt class="sig sig-object py" id="molaspect.read_mol.read_smiles">
-<span class="sig-prename descclassname"><span class="pre">molaspect.read_mol.</span></span><span class="sig-name descname"><span class="pre">read_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.read_mol.read_smiles" title="Link to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">molaspect.read_mol.</span></span><span class="sig-name descname"><span class="pre">read_smiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">smiles</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">123</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#molaspect.read_mol.read_smiles" title="Link to this definition"></a></dt>
 <dd><p>Build a 3D mol from a single SMILES string.</p>
 <p>Always adds hydrogens and embeds with <code class="docutils literal notranslate"><span class="pre">randomSeed=seed</span></code>.
-UFF optimization runs only when <code class="docutils literal notranslate"><span class="pre">optimize</span></code> is True. For
+UFF optimization runs unless <code class="docutils literal notranslate"><span class="pre">optimize</span></code> is False. For
 multiple SMILES, use a <code class="docutils literal notranslate"><span class="pre">.csv</span></code> file with <code class="docutils literal notranslate"><span class="pre">read_mol_file</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -132,7 +133,7 @@ multiple SMILES, use a <code class="docutils literal notranslate"><span class="p
 <li><p><strong>smiles</strong> (<em>str</em>) – A single SMILES string.</p></li>
 <li><p><strong>seed</strong> (<em>int</em>) – Random seed for embedding. Defaults to 123.</p></li>
 <li><p><strong>optimize</strong> (<em>bool</em>) – If True, run UFF optimization after
-embedding. Defaults to False.</p></li>
+embedding. Defaults to True.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
